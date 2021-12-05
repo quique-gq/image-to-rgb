@@ -65,6 +65,7 @@
       };
 
       filename.onchange = function () {
+        if (/[^a-z0-9_.@()-]/i.test(filename.value)) return;
         download.download = filename.value || defaultFilename;
       };
     })();
