@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  by Literal Line
+  discord: Lɪᴛᴇʀᴀʟ#9801
+-->
+<head>
+  <meta charset="utf-8">
+  <title>Image to RGB Converter</title>
+  <style>
+    body {
+      image-rendering: pixelated;
+    }
+    #upload, #output {
+      display: block;
+    }
+    section {
+      margin: 1em 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Image to RGB Converter</h1>
+  <section>
+    <input id="upload" type="file" accept="image/*">
+    <canvas id="canvas" width=0 height=0 style="width: 200px"></canvas>
+  </section>
+  <section>
+    <div>Output:</div>
+    <textarea id="output" cols=50 rows=10></textarea>
+  </section>
+  <section>
+    <p>Filename: <code><input id="filename" type="text">.csv</code></p>
+    <p><a id="download" style="visibility: hidden">Download as CSV file</a></p>
+  </section>
+  <script>
+    (function () {
+      var upload = document.getElementById('upload');
+      var output = document.getElementById('output');
+      var img = document.createElement('img');
+      var filename = document.getElementById('filename');
+      var download = document.getElementById('download');
+      var c = document.getElementById('canvas');
+      var ctx = c.getContext('2d', { alpha: false });
+      var defaultFilename = 'rgb_list';
+      download.download = defaultFilename;
+
+      upload.onchange = function () {
+        if (!this.files[0]) return;
+        var img = document.createElement('img');
+        img.src = URL.createObjectURL(this.files[0]);
+        img.onload = function () {
+          c.width = img.width;
+          c.height = img.height;
+          ctx.drawImage(img, 0, 0);
+          var data = ctx.getImageData(0, 0, c.width, c.height).data;
+          var csv = [];
+          for (var i = 0; i < data.length; i++) {
+            ((i + 1) % 4) && csv.push(data[i]);
+          }
+          output.value = csv.join();
+          download.href = URL.createObjectURL(new Blob([ output.value ], { type: 'text/csv' }));
+          download.style.visibility = 'visible';
+        };
+      };
+
+      filename.onchange = function () {
+        download.download = filename.value || defaultFilename;
+      };
+    })();
+  </script>
+</body>
+</html>
