@@ -46,6 +46,7 @@
       download.download = defaultFilename;
 
       upload.onchange = function () {
+        console.log('hi')
         if (!this.files[0]) return;
         var img = document.createElement('img');
         img.src = URL.createObjectURL(this.files[0]);
@@ -62,6 +63,11 @@
           download.href = URL.createObjectURL(new Blob([ output.value ], { type: 'text/csv' }));
           download.style.visibility = 'visible';
         };
+      };
+
+      document.onpaste = function (e) {
+        upload.files = e.clipboardData.files;
+        upload.onchange();
       };
 
       filename.onchange = function () {
