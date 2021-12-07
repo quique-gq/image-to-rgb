@@ -23,7 +23,7 @@
   <h1>Image to RGB Converter</h1>
   <section>
     <input id="upload" type="file" accept="image/*">
-    <canvas id="canvas" width=0 height=0 style="width: 200px"></canvas>
+    <canvas id="canvas" width=0 height=0 style="max-width: 400px"></canvas>
   </section>
   <section>
     <div>Output:</div>
@@ -46,7 +46,6 @@
       download.download = defaultFilename;
 
       upload.onchange = function () {
-        console.log('hi')
         if (!this.files[0]) return;
         var img = document.createElement('img');
         img.src = URL.createObjectURL(this.files[0]);
